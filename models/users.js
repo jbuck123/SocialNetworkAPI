@@ -1,11 +1,35 @@
 const mongoose = require('mongoose');
 
 // user model using mongoose schema 
+var validateEmail = function(email) {
+    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return re.test(email)
+};
 
 const userSchema = new mongoose.Schema({
-    firstname: { type: String, required: true},
-    lastname: { type: String, required: true},
-    lastAccessed: { type: Date, default: Date.now},
+  username: { type: String, required: true, trim: true, unique: true },
+  email: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+    lowercase: true,
+    required: "Email address is required",
+    validate: [validateEmail, "Please fill a valid email address"],
+    match: [
+      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      "Please fill a valid email address",
+    ],
+  },
+  lastAccessed: { type: Date, default: Date.now },
+  
+  // thoughts ... array of id values referencing hte thought mode;
+  // friends ... array of _id values referencing the User model (self-reference)
+
+  // creating a virtual which seems like a method attatched to the user model. 
+  // this might look like this 
+  // userSchema.virtual('friends').get(function(){ return friends.length })
+  
 });
 
 const User = mongoose.model('User', userSchema);
