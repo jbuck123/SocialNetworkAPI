@@ -27,6 +27,23 @@ const thoughtSchema = new mongoose.Schema({
 thoughtSchema.virtuals('reactionCount').get(function () {
     this.reactions.length
 })
+const reactionSchema = new mongoose.Schema({
+    reactionBody: {
+        DataType: String, 
+        required: true,
+        max: [280, 'please dont react with so many words.......']
+    },
+    username: {
+        DataType: String,
+        required: true
+    },
+    createdAt : {
+        DataType: Date, 
+        defualt: Date.now
+        // keeps asking me to use a getter method to format the timestamp on query
+    }
+})
+
 
 const Thought = model('user', thoughtSchema);
 // export the model
