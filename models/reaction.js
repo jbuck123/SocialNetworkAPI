@@ -18,3 +18,4 @@ const reactionSchema = new mongoose.Schema({
 })
 
 // apparently this will not be a model but rather will be used as the reactions fields subducment schema in the THOUGHT MODEL
+
