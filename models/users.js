@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const thoughtSchema = require('./thought')
 
 // user model using mongoose schema 
 var validateEmail = function(email) {
@@ -22,27 +23,40 @@ const userSchema = new mongoose.Schema({
     ],
   },
   lastAccessed: { type: Date, default: Date.now },
-  
+
+
+//   thoughts : {[thoughtSchema]},
+
   // thoughts ... array of id values referencing hte thought mode;
   // friends ... array of _id values referencing the User model (self-reference)
+  
 
   // creating a virtual which seems like a method attatched to the user model. 
   // this might look like this 
-  // userSchema.virtual('friends').get(function(){ return friends.length })
+ 
   
 });
+                            // getter
+                            // needs a setter
+userSchema.virtuals('friends').get(function() {
+    return this.friends.length
+})
 
-const User = mongoose.model('User', userSchema);
 
-const handleError = (err) => console.log(err);
 
-User.find({}).exec((err, collection) => {
-  if (collection.length === 0) {
-    User.insertMany([
-      { firstname: "James", lastname: "Buchmann" },
-      { firstname: "Matt", lastname: "Onnen" },
-      { firstname: "JD", lastname: "Tadlock" },
-      { firstname: "Ryan", lastname: "Theilen" },
-    ]);
-  }
-});
+
+
+// const User = mongoose.model('User', userSchema);
+
+// const handleError = (err) => console.log(err);
+
+// User.find({}).exec((err, collection) => {
+//   if (collection.length === 0) {
+//     User.insertMany([
+//       { firstname: "James", lastname: "Buchmann" },
+//       { firstname: "Matt", lastname: "Onnen" },
+//       { firstname: "JD", lastname: "Tadlock" },
+//       { firstname: "Ryan", lastname: "Theilen" },
+//     ]);
+//   }
+// });
