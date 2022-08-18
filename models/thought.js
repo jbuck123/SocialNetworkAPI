@@ -15,37 +15,38 @@ const thoughtSchema = new mongoose.Schema({
         // use a getter method to format the timestamp on query
         // code goes here
     },
-    // these are like replies 
-    reactions: {
-        type: Date,
-        // leaving this for now
-
-        // needs to be an Array of nested documents with the reactionSchema 
-    }
-})
+    userId: {
+        type: String, required: true
+    },
+    reactions: [{
+        reactionId : {
+            type: SchemaTypes.ObjectId,
+            required: true
+            // defualt value new objectID?
+        },
+        reactionBody: {
+            type: String,
+            required: true,
+            max: [280, 'Please dont exceed character limit']
+        },
+        username: {
+            type: String,
+            required: true
+        },
+        createdAt: {
+            type: Date,
+            defualt: Date.now
+        },
+    }]
+});
 
 thoughtSchema.virtuals('reactionCount').get(function () {
-    this.reactions.length
-})
-const reactionSchema = new mongoose.Schema({
-    reactionBody: {
-        DataType: String, 
-        required: true,
-        max: [280, 'please dont react with so many words.......']
-    },
-    username: {
-        DataType: String,
-        required: true
-    },
-    createdAt : {
-        DataType: Date, 
-        defualt: Date.now
-        // keeps asking me to use a getter method to format the timestamp on query
-    }
+    return this.reactions.length
 })
 
 
 const Thought = model('user', thoughtSchema);
 // export the model
+
 module.exports = Thought;
 

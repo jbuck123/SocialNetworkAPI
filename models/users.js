@@ -25,16 +25,11 @@ const userSchema = new mongoose.Schema({
   lastAccessed: { type: Date, default: Date.now },
 
 
-//   thoughts : {[thoughtSchema]},
-
-  // thoughts ... array of id values referencing hte thought mode;
-  // friends ... array of _id values referencing the User model (self-reference)
-  
-
-  // creating a virtual which seems like a method attatched to the user model. 
-  // this might look like this 
- 
-  
+  thoughts: [{
+      type: SchemaTypes.ObjectId,
+      ref: 'thought'
+  }],
+  friends: []
 });
                             // getter
                             // needs a setter

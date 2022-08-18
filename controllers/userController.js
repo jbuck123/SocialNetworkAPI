@@ -37,7 +37,7 @@ module.exports = {
     },
     // Delete a course 
 
-    deleteCourse(req, res) {
+    deleteUser(req, res) {
         // just like finding one but instead of just finding it.. .its also being destroyeD!
 
         User.findOneAndDelete({ _id: req.params.userId})
