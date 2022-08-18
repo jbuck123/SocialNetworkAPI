@@ -35,4 +35,13 @@ api_router.get('/user/:userId', (req, res) => {
         .catch((err) => res.status(500).json(err))
 })
 
+// delete a user and his friends
+
+api_router.delete('/user/userId', (req, res) => {
+    User.deleteOne({ _id: req.params.userId })
+    .then(() => res.json({ message: 'deleted user'}))
+})
+
+
+
 module.exports = api_router
