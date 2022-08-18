@@ -41,7 +41,20 @@ api_router.delete('/user/userId', (req, res) => {
     User.deleteOne({ _id: req.params.userId })
     .then(() => res.json({ message: 'deleted user'}))
 })
+// update user
+api_router.put( '/user/userId', (req, res) => {
+    User.findOneAndUpdate(
+        { _id: req.params.userId},
+        {$set: req.body},
+        { runValidators: true, new: true}
+    )
+    .then((application) =>
+    !application
+      ? res.status(404).json({ message: 'No application with this id!' })
+      : res.json(application)
+  )
 
+})
 
 
 module.exports = api_router
