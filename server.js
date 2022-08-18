@@ -1,12 +1,13 @@
 const express = require('express')
 const app = express();
 const PORT = process.env.PORT || 8080
-// // const routes = require('./routes')
+const api_routes = require('./routes/api_routes');
 
 const db = require('./config/connection')
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+app.use('/api', api_routes);
 // // s
 
 

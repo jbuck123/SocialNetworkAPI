@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const thoughtSchema = require('./thought')
+const {Schema, model, SchemaTypes} = require('mongoose');
+
 
 // user model using mongoose schema 
 var validateEmail = function(email) {
@@ -7,7 +7,7 @@ var validateEmail = function(email) {
     return re.test(email)
 };
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   username: { type: String, required: true, trim: true, unique: true },
   email: {
     type: String,
@@ -26,16 +26,16 @@ const userSchema = new mongoose.Schema({
 
 
   thoughts: [{
-      type: SchemaTypes.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'thought'
   }],
   friends: []
 });
                             // getter
                             // needs a setter
-userSchema.virtuals('friends').get(function() {
-    return this.friends.length
-})
+// userSchema.virtuals('friends').get(function() {
+//     return this.friends.length
+// })
 
 const User = model('user', userSchema);
 // export the model
@@ -44,17 +44,3 @@ module.exports = User;
 
 
 
-// const User = mongoose.model('User', userSchema);
-
-// const handleError = (err) => console.log(err);
-
-// User.find({}).exec((err, collection) => {
-//   if (collection.length === 0) {
-//     User.insertMany([
-//       { firstname: "James", lastname: "Buchmann" },
-//       { firstname: "Matt", lastname: "Onnen" },
-//       { firstname: "JD", lastname: "Tadlock" },
-//       { firstname: "Ryan", lastname: "Theilen" },
-//     ]);
-//   }
-// });
