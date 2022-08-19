@@ -94,9 +94,16 @@ api_router.post('/thought', (req, res) => {
 })
 api_router.delete('/thought/thoughtId', (req, res) => {
     User
-    .findByIdAndRemove({ _id: req.params.userId })
+    .findByIdAndRemove({ _id: req.params.thoughtId})
     .exec()
-    .then(() => res.json({ message: 'deleted user'}))
+    .then(() => res.json({ message: 'thought deleted'}))
+})
+
+api_router.put('/thought/thoughtId', (req, res) => {
+    User
+    .findByIdAndUpdate({ _id: req.params.thoughtId})
+    .exec()
+    .then(() => res.json({message: 'thought updated'}))
 })
 
 

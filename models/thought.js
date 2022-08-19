@@ -19,16 +19,18 @@ const thoughtSchema = new Schema({
         type: String, required: true
         // this is the user that created the reaction
     },
-    reactionId : {
+    reactionId : [{
         type: SchemaTypes.ObjectId,
         ref: 'reaction'
         // defualt value new objectID?
-    },
+    }],
 });
 
 // thoughtSchema.virtuals('reactionCount').get(function () {
 //     return this.reactions.length
 // })
+
+// why is the application getting so angry with me when I try to create a virtual?
 
 
 const Thought = model('thought', thoughtSchema);
