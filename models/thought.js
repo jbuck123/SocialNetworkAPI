@@ -17,8 +17,7 @@ const thoughtSchema = new Schema({
     },
     username: {
         type: String, required: true
-        // is this supposed to refrence a user that is already created?
-        // another
+        // this is the user that created the reaction
     },
     reactionId : {
         type: SchemaTypes.ObjectId,

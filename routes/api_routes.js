@@ -1,6 +1,7 @@
 const api_router = require('express').Router();
-const User = require('../models/users')
-const Thought = require('../models/thought')
+const User = require('../models/users');
+const Thought = require('../models/thought');
+const Reaction = require('../models/reaction');
 
 // create the first user 
 api_router.get('/user', (req, res)=> {
@@ -38,12 +39,15 @@ api_router.get('/user/:userId', (req, res) => {
 
 // delete a user and his friends
 
-api_router.delete('/user/userId', (req, res) => {
-    User.deleteOne({ _id: req.params.userId })
+api_router.delete('/user/:userId', (req, res) => {
+    User
+    .findByIdAndRemove({ _id: req.params.userId })
+    .exec()
     .then(() => res.json({ message: 'deleted user'}))
 })
+
 // update user
-api_router.put( '/user/userId', (req, res) => {
+api_router.put( '/user/:userId', (req, res) => {
     User.findOneAndUpdate(
         { _id: req.params.userId},
         {$set: req.body},
@@ -78,14 +82,38 @@ api_router.get('/thought', (req, res)=> {
     })
 })
 
-// api_router.post('/thought', (req, res) => {
-//     const newUser = new Thought({
-//         thoughtText: req.body.thoughtText,
-//         crea: req.body.email,
-//     })
-//     newUser.save();
+api_router.post('/thought', (req, res) => {
+    const newUser = new Thought({
+        thoughtText: req.body.thoughtText,
+        username: req.body.email, // would this be the Id of the user?
 
-//     res.json(newUser)
-// })
+    })
+    newUser.save();
 
-// module.exports = api_router
+    res.json(newUser)
+})
+api_router.delete('/thought/thoughtId', (req, res) => {
+    User
+    .findByIdAndRemove({ _id: req.params.userId })
+    .exec()
+    .then(() => res.json({ message: 'deleted user'}))
+})
+
+
+
+
+// reactions model
+
+api_router.get('/reaction', (req, res)=> {
+    Reaction.find({}, (err, result) => {
+        if(result) {
+            res.status(200).json(result);
+        } else {
+            console.log('error something wroning');
+            res.status(500).json({ message: 'something went wrong'})
+        }
+    })
+})
+
+
+module.exports = api_router

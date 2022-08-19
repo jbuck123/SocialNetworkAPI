@@ -30,10 +30,10 @@ const userSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'thought'
   }],
-  friends: [{
-    type: Schema.Types.ObjectId,
-    ref: 'friends'
-  }] // this is somehting i will need to ask my tutor about tomorrow
+  // friends: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'friends'
+  // }] // this is somehting i will need to ask my tutor about tomorrow
 });
                             // getter
                             // needs a setter
