@@ -1,5 +1,6 @@
 const api_router = require('express').Router();
 const User = require('../models/users')
+const Thought = require('../models/thought')
 
 // create the first user 
 api_router.get('/user', (req, res)=> {
@@ -57,4 +58,34 @@ api_router.put( '/user/userId', (req, res) => {
 })
 
 
-module.exports = api_router
+
+
+
+//// section that will be for thoughts and reactions ..... a long ass script but it gets confusing without it 
+
+
+
+
+
+api_router.get('/thought', (req, res)=> {
+    Thought.find({}, (err, result) => {
+        if(result) {
+            res.status(200).json(result);
+        } else {
+            console.log('error something hurting me');
+            res.status(500).json({ message: 'something went very bad'})
+        }
+    })
+})
+
+// api_router.post('/thought', (req, res) => {
+//     const newUser = new Thought({
+//         thoughtText: req.body.thoughtText,
+//         crea: req.body.email,
+//     })
+//     newUser.save();
+
+//     res.json(newUser)
+// })
+
+// module.exports = api_router

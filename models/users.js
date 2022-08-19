@@ -7,6 +7,7 @@ var validateEmail = function(email) {
     return re.test(email)
 };
 
+
 const userSchema = new Schema({
   username: { type: String, required: true, trim: true, unique: true },
   email: {
@@ -29,7 +30,10 @@ const userSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'thought'
   }],
-  friends: []
+  friends: [{
+    type: Schema.Types.ObjectId,
+    ref: 'friends'
+  }] // this is somehting i will need to ask my tutor about tomorrow
 });
                             // getter
                             // needs a setter
