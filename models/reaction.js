@@ -17,8 +17,10 @@ const reactionSchema = new Schema({
     createdAt: {
         type: Date,
         defualt: Date.now
-    }
-});
+    },
+
+}
+);
 
 const Reaction = model('reaction', reactionSchema);
 

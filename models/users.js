@@ -34,7 +34,14 @@ const userSchema = new Schema({
   //   type: Schema.Types.ObjectId,
   //   ref: 'friends'
   // }] // this is somehting i will need to ask my tutor about tomorrow
-});
+},
+{
+  toJSON: {
+      virtuals: true,
+  },
+  id: false
+}
+);
                             // getter
                             // needs a setter
 // userSchema.virtuals('friends').get(function() {

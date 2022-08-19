@@ -14,7 +14,7 @@ api_router.get('/user', (req, res)=> {
         }
     })
 })
-// able to post to user but not find them ....
+
 api_router.post('/user', (req, res) => {
     const newUser = new User({
         username: req.body.username,
@@ -37,7 +37,7 @@ api_router.get('/user/:userId', (req, res) => {
         .catch((err) => res.status(500).json(err))
 })
 
-// delete a user and his friends
+// delete a user and eventually his friends
 
 api_router.delete('/user/:userId', (req, res) => {
     User
@@ -61,14 +61,7 @@ api_router.put( '/user/:userId', (req, res) => {
 
 })
 
-
-
-
-
 //// section that will be for thoughts and reactions ..... a long ass script but it gets confusing without it 
-
-
-
 
 
 api_router.get('/thought', (req, res)=> {
@@ -122,5 +115,20 @@ api_router.get('/reaction', (req, res)=> {
     })
 })
 
+api_router.post('/reaction', (req, res) => {
+    const newReaction = new Reaction({
+        reactionBody: req.body.reactionBody,
+        // username: req.body.email, // idk what to do for username
+    })
+    newReaction.save();
 
+    res.json(newReaction)
+})
+
+api_router.delete('/reaction/:reactionId', (req, res) => {
+   Reaction
+   .findByIdAndRemove({ _id: req.params.reactionID})
+   .exec() 
+   .then(() => res.json({message: 'thought updated'}))
+})
 module.exports = api_router
