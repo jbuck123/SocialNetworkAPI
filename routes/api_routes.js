@@ -78,7 +78,7 @@ api_router.get('/thought', (req, res)=> {
 api_router.post('/thought', (req, res) => {
     const newUser = new Thought({
         thoughtText: req.body.thoughtText,
-        username: req.body.email, // would this be the Id of the user?
+        username: req.body.username, // would this be the Id of the user?
 
     })
     newUser.save();
