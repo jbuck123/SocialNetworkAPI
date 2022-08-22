@@ -78,17 +78,31 @@ api_router.get('/thought', (req, res)=> {
     })
 })
 
-// get one thought and hopefully populate the 
+// get one thought and hopefully populate the reactions
+
+
+api_router.get('/user/:userId', (req, res) => {
+    User.findOne({ _id: req.params.userId})
+
+    .populate({path: 'thoughts', model: 'Thought'})
+    .exec()
+    .then((user) =>
+    !user
+        ?res.status(404).json({message: 'no user with that ID'})
+        : res.json(user)
+        )
+        .catch((err) => res.status(500).json(err))
+})
 
 api_router.get('/thought/:thoughtId', (req, res) => {
     Thought.findOne({ _id: req.params.thoughtId})
 
     .populate({path: 'reactions', model: 'Reaction'})
     .exec()
-    .then((user) =>
-    !user
-        ?res.status(404).json({message: 'no user with that ID'})
-        : res.json(user)
+    .then((thought) =>
+    !thought
+        ?res.status(404).json({message: 'no thought with that ID'})
+        : res.json(thought)
         )
         .catch((err) => res.status(500).json(err))
 })

@@ -32,9 +32,9 @@ const thoughtSchema = new Schema({
       },
 });
 
-// thoughtSchema.virtuals('reactionCount').get(function () {
-//     return this.reactions.length
-// })
+thoughtSchema.virtual('reactionCount').get(function () {
+    return this.reactionId.length
+})
 
 // why is the application getting so angry with me when I try to create a virtual?
 
