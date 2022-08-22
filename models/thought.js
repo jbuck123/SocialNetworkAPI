@@ -20,10 +20,16 @@ const thoughtSchema = new Schema({
         // this is the user that created the reaction
     },
     reactionId : [{
-        type: SchemaTypes.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'reaction'
         // defualt value new objectID?
     }],
+},
+{
+    id: false,
+    toJSON: {
+        virtuals: true,
+      },
 });
 
 // thoughtSchema.virtuals('reactionCount').get(function () {
@@ -33,7 +39,7 @@ const thoughtSchema = new Schema({
 // why is the application getting so angry with me when I try to create a virtual?
 
 
-const Thought = model('thought', thoughtSchema);
+const Thought = model('Thought', thoughtSchema);
 // // export the model
 
 module.exports = Thought;

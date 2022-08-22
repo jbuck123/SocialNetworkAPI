@@ -29,6 +29,10 @@ api_router.post('/user', (req, res) => {
 
 api_router.get('/user/:userId', (req, res) => {
     User.findOne({ _id: req.params.userId})
+
+    .populate({path: 'thoughts', model: 'Thought'})
+    .populate('friends')
+    .exec()
     .then((user) =>
     !user
         ?res.status(404).json({message: 'no user with that ID'})
@@ -76,14 +80,38 @@ api_router.get('/thought', (req, res)=> {
 })
 
 api_router.post('/thought', (req, res) => {
-    const newUser = new Thought({
-        thoughtText: req.body.thoughtText,
-        username: req.body.username, // would this be the Id of the user?
+    Thought.create(req.body)
+        .then((thought) => {
+            return User.findOneAndUpdate(
+                {_id: req.body.userId},
+                {$push: { thoughts: thought._id}},
+                {new: true}
+            );
+        })
+        .then((user) => {
+            if(!user) {
+                res.status(404)
+            } else { res.json('created thought')}
+        }) .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+          });
 
-    })
-    newUser.save();
 
-    res.json(newUser)
+
+
+
+
+    
+    // const newThought = new Thought({
+    //     thoughtText: req.body.thoughtText,
+    //     username: req.body.username, // would this be the Id of the user?
+        
+    // })
+
+    // newThought.save();
+
+    // res.json(newThought)
 })
 api_router.delete('/thought/thoughtId', (req, res) => {
     User
@@ -116,13 +144,23 @@ api_router.get('/reaction', (req, res)=> {
 })
 
 api_router.post('/reaction', (req, res) => {
-    const newReaction = new Reaction({
-        reactionBody: req.body.reactionBody,
-        // username: req.body.email, // idk what to do for username
-    })
-    newReaction.save();
-
-    res.json(newReaction)
+    Reaction.create(req.body)
+        .then((reaction) => {
+            console.log(reaction)
+            return User.findOneAndUpdate(
+                {_id: req.body.userId},
+                {$push: { reactions: reaction._id}},
+                {new: true}
+            );
+        })
+        .then((user) => {
+            if(!user) {
+                res.status(404)
+            } else { res.json('created reaction')}
+        }) .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+          });
 })
 
 api_router.delete('/reaction/:reactionId', (req, res) => {

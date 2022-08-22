@@ -28,12 +28,12 @@ const userSchema = new Schema({
 
   thoughts: [{
       type: Schema.Types.ObjectId,
-      ref: 'thought'
+      ref: 'Thought'
   }],
-  // friends: [{
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'friends'
-  // }] // this is somehting i will need to ask my tutor about tomorrow
+  friends: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }] // this is somehting i will need to ask my tutor about tomorrow
 },
 {
   toJSON: {
@@ -44,11 +44,11 @@ const userSchema = new Schema({
 );
                             // getter
                             // needs a setter
-// userSchema.virtuals('friends').get(function() {
-//     return this.friends.length
-// })
+userSchema.virtual('friends_count').get(function() {
+    return this.friends.length
+})
 
-const User = model('user', userSchema);
+const User = model('User', userSchema);
 // export the model
 module.exports = User;
 
