@@ -1,4 +1,5 @@
 const {Schema, model, SchemaTypes} = require('mongoose');
+const Thought = require('../models/thought.js')
 
 
 // reaction model
@@ -21,6 +22,12 @@ const reactionSchema = new Schema({
 
 }
 );
+
+reactionSchema.pre('remove', function (next) {
+    Thought.remove({reactions: this._id })
+    .exec()
+    next()
+})
 
 const Reaction = model('Reaction', reactionSchema);
 

@@ -1,5 +1,5 @@
 const { Schema, model, SchemaTypes} = require('mongoose');
-
+const User = require('../models/users');
 
 const thoughtSchema = new Schema({
     thoughtText: {
@@ -21,7 +21,7 @@ const thoughtSchema = new Schema({
     },
     reactions : [{
         type: Schema.Types.ObjectId,
-        ref: 'reaction'
+        ref: 'Reaction'
         // defualt value new objectID?
     }],
 },
@@ -37,7 +37,11 @@ thoughtSchema.virtual('reactionCount').get(function () {
 })
 
 // why is the application getting so angry with me when I try to create a virtual?
-
+thoughtSchema.pre('remove', function (next) {
+    User.remove({thoughts: this._id })
+    .exec()
+    next()
+})
 
 const Thought = model('Thought', thoughtSchema);
 // // export the model

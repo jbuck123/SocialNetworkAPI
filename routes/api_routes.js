@@ -83,7 +83,7 @@ api_router.get('/thought', (req, res)=> {
 api_router.get('/thought/:thoughtId', (req, res) => {
     Thought.findOne({ _id: req.params.thoughtId})
     .select('-__v')
-    .populate({path: 'reactions', model: 'Reaction'})
+    .populate( 'reactions')
     .exec()
     .then((thought) =>
     !thought
@@ -150,19 +150,26 @@ api_router.get('/reaction', (req, res)=> {
 })
 
 api_router.post('/reaction', (req, res) => {
+    Thought.findOne({_id: req.body.thoughtId})
+    .then((thought) => {
+        console.log(thought)
+    })
     Reaction.create(req.body)
+
         .then((reaction) => {
-            console.log(reaction)
+            console.log(req.body)
             return Thought.findOneAndUpdate(
                 {_id: req.body.thoughtId},
                 {$push: { reactions: reaction._id}},
                 {new: true}
             );
         })
-        .then((user) => {
-            if(!user) {
+        .then((thought) => {
+            console.log(thought)
+            if(!thought) {
                 res.status(404)
-            } else { res.json('created reaction')}
+            } else {
+             res.json('created reaction')}
         }) .catch((err) => {
             console.log(err);
             res.status(500).json(err);
@@ -171,7 +178,7 @@ api_router.post('/reaction', (req, res) => {
 
 api_router.delete('/reaction/:reactionId', (req, res) => {
    Reaction
-   .findByIdAndRemove({ _id: req.params.reactionID})
+   .findByIdAndRemove({ _id: req.params.reactionId})
    .exec() 
    .then(() => res.json({message: 'reaction deleted '}))
 })
