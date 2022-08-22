@@ -29,7 +29,7 @@ api_router.post('/user', (req, res) => {
 
 api_router.get('/user/:userId', (req, res) => {
     User.findOne({ _id: req.params.userId})
-
+    .select('-__v')
     .populate({path: 'thoughts', model: 'Thought'})
     .exec()
     .then((user) =>
@@ -78,25 +78,11 @@ api_router.get('/thought', (req, res)=> {
     })
 })
 
-// get one thought and hopefully populate the reactions
-
-
-api_router.get('/user/:userId', (req, res) => {
-    User.findOne({ _id: req.params.userId})
-
-    .populate({path: 'thoughts', model: 'Thought'})
-    .exec()
-    .then((user) =>
-    !user
-        ?res.status(404).json({message: 'no user with that ID'})
-        : res.json(user)
-        )
-        .catch((err) => res.status(500).json(err))
-})
+// get one thought
 
 api_router.get('/thought/:thoughtId', (req, res) => {
     Thought.findOne({ _id: req.params.thoughtId})
-
+    .select('-__v')
     .populate({path: 'reactions', model: 'Reaction'})
     .exec()
     .then((thought) =>
@@ -127,17 +113,24 @@ api_router.post('/thought', (req, res) => {
 
 })
 api_router.delete('/thought/thoughtId', (req, res) => {
-    User
+    Thought
     .findByIdAndRemove({ _id: req.params.thoughtId})
     .exec()
     .then(() => res.json({ message: 'thought deleted'}))
 })
 
-api_router.put('/thought/thoughtId', (req, res) => {
-    User
-    .findByIdAndUpdate({ _id: req.params.thoughtId})
-    .exec()
-    .then(() => res.json({message: 'thought updated'}))
+api_router.put( '/thought/:thoughtId', (req, res) => {
+    Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId},
+        {$set: req.body},
+        { runValidators: true, new: true}
+    )
+    .then((application) =>
+    !application
+      ? res.status(404).json({ message: 'There is no thought connected to that ID' })
+      : res.json(application)
+  )
+
 })
 
 
@@ -160,8 +153,8 @@ api_router.post('/reaction', (req, res) => {
     Reaction.create(req.body)
         .then((reaction) => {
             console.log(reaction)
-            return User.findOneAndUpdate(
-                {_id: req.body.userId},
+            return Thought.findOneAndUpdate(
+                {_id: req.body.thoughtId},
                 {$push: { reactions: reaction._id}},
                 {new: true}
             );
