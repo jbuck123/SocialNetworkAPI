@@ -31,7 +31,6 @@ api_router.get('/user/:userId', (req, res) => {
     User.findOne({ _id: req.params.userId})
 
     .populate({path: 'thoughts', model: 'Thought'})
-    .populate('friends')
     .exec()
     .then((user) =>
     !user
@@ -79,6 +78,21 @@ api_router.get('/thought', (req, res)=> {
     })
 })
 
+// get one thought and hopefully populate the 
+
+api_router.get('/thought/:thoughtId', (req, res) => {
+    Thought.findOne({ _id: req.params.thoughtId})
+
+    .populate({path: 'reactions', model: 'Reaction'})
+    .exec()
+    .then((user) =>
+    !user
+        ?res.status(404).json({message: 'no user with that ID'})
+        : res.json(user)
+        )
+        .catch((err) => res.status(500).json(err))
+})
+
 api_router.post('/thought', (req, res) => {
     Thought.create(req.body)
         .then((thought) => {
@@ -97,21 +111,6 @@ api_router.post('/thought', (req, res) => {
             res.status(500).json(err);
           });
 
-
-
-
-
-
-    
-    // const newThought = new Thought({
-    //     thoughtText: req.body.thoughtText,
-    //     username: req.body.username, // would this be the Id of the user?
-        
-    // })
-
-    // newThought.save();
-
-    // res.json(newThought)
 })
 api_router.delete('/thought/thoughtId', (req, res) => {
     User
@@ -167,6 +166,6 @@ api_router.delete('/reaction/:reactionId', (req, res) => {
    Reaction
    .findByIdAndRemove({ _id: req.params.reactionID})
    .exec() 
-   .then(() => res.json({message: 'thought updated'}))
+   .then(() => res.json({message: 'reaction deleted '}))
 })
 module.exports = api_router
